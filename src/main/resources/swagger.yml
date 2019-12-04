@@ -1,0 +1,249 @@
+swagger: "2.0"
+info:
+  description: "API para projeto final do acelera DEV"
+  version: "1.0.0"
+  title: "Acelera DEV"
+host: "services.aceleradev.com.br"
+basePath: "/v1"
+tags:
+  - name: "usuário"
+    description: "Relacionado a pessoa que utilizará a API"
+  - name: "informações"
+    description: "Informações dos logs"
+  - name: "alterar"
+    description: "Alteração do registro"
+schemes:
+  - "https"
+  - "http"
+paths:
+  /cadastro:
+    post:
+      tags:
+        - "usuário"
+      summary: "Cadastro um usuário"
+      description: ""
+      operationId: "addUser"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          type: string
+          name: "x-usuário"
+          description: "Usuário a ser adicionado"
+          required: true
+        - in: "header"
+          type: string
+          name: "x-senha"
+          description: "Senha desejada pelo usuário"
+          required: true
+      responses:
+        201:
+          description: "Created"
+        400:
+          description: "Bad Request"
+        422:
+          description: "Unprocessable Entity"
+          schema:
+            type: string
+            example:
+              message: "Senha deve conter 8 caracteres"
+  /log:
+    get:
+      tags:
+        - "informações"
+      summary: "Busca informações dos logs"
+      description: ""
+      operationId: "retrieveLogs"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          type: string
+          name: "x-token"
+          description: "Token recebido no login"
+          required: true
+      responses:
+        200:
+          description: "Sucesso"
+          schema:
+            $ref: "#/definitions/LogsModel"
+        204:
+          description: "Nenhum registro encontrado"
+        400:
+          description: "Bad request"
+    delete:
+      tags:
+        - "alterar"
+      summary: "Deleta o log"
+      description: ""
+      operationId: "deleteLog"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "x-token"
+          in: "header"
+          description: "Token de autenticacao do cliente"
+          required: true
+          type: "string"
+        - name: "codigo"
+          in: "query"
+          description: "Codigo do log a ser arquivado"
+          required: true
+          type: "integer"
+      responses:
+        200:
+          description: "Sucesso"
+        400:
+          description: "Não foi possível deletar o log"
+  /login:
+    get:
+      tags:
+        - "usuário"
+      summary: "Realiza o login do cliente"
+      description: ""
+      operationId: "loginUser"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "x-username"
+          in: "header"
+          description: "The user name for login"
+          required: true
+          type: "string"
+        - name: "x-password"
+          in: "header"
+          description: "The password for login in clear text"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Sucesso"
+          schema:
+            type: "string"
+          headers:
+            X-token:
+              type: "string"
+              description: "Token para chamada a outras apis"
+        400:
+          description: "Invalid username/password supplied"
+  /log/arquiva:
+    post:
+      tags:
+        - "alterar"
+      summary: "Arquiva o log"
+      description: ""
+      operationId: "archiveLog"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "x-token"
+          in: "header"
+          description: "Token de autenticacao do cliente"
+          required: true
+          type: "string"
+        - name: "codigo"
+          in: "query"
+          description: "Codigo do log a ser arquivado"
+          required: true
+          type: "integer"
+      responses:
+        200:
+          description: "Sucesso"
+        400:
+          description: "Não foi possível arquivar o log"
+  /log/detailed:
+    get:
+      tags:
+        - "informações"
+      summary: "Busca informações detalhadas dos logs"
+      description: ""
+      operationId: "retrieveDetailedLogs"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "header"
+          type: string
+          name: "x-token"
+          description: "Token recebido no login"
+          required: true
+        - in: "query"
+          type: integer
+          name: "codigo"
+          description: "Codigo do log"
+          required: true
+      responses:
+        200:
+          description: "Sucesso"
+          schema:
+            $ref: "#/definitions/DetailedLogsModel"
+        204:
+          description: "Nenhum registro encontrado"
+        400:
+          description: "Bad request"
+definitions:
+  LogsModel:
+    type: "object"
+    properties:
+      codigo:
+        type: "integer"
+        example: 1
+      level:
+        type: "string"
+        enum:
+          - "Warning"
+          - "Trace"
+          - "Error"
+        example: "Warning"
+      descricao:
+        type: "string"
+        example: "nullpointerException"
+      quantidade:
+        type: "integer"
+        format: "int32"
+        example: 30
+      origem:
+        type: "string"
+        example: "127.0.0.5"
+      data:
+        type: "string"
+        format: "date-time"
+        example: "2019-10-14 10:00:00"
+  DetailedLogsModel:
+    type: "object"
+    properties:
+      codigo:
+        type: "integer"
+        example: 1
+      level:
+        type: "string"
+        enum:
+          - "Warning"
+          - "Trace"
+          - "Error"
+        example: "Warning"
+      descricao:
+        type: "string"
+        example: "nullpointerException"
+      quantidade:
+        type: "integer"
+        format: "int32"
+        example: 30
+      origem:
+        type: "string"
+        example: "127.0.0.5"
+      data:
+        type: "string"
+        format: "date-time"
+        example: "2019-10-14 10:00:00"
+      coletor:
+        type: "string"
+        example: "Rafael Alvares"
+      detalhes:
+        type: "string"
+        example: "File:/go/pkg/mod"
