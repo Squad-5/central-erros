@@ -6,7 +6,9 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.api.CadastroApi;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class CadastroApiImpl implements CadastroApi {
 
     private UsuarioServiceInterface usuarioServiceInterface;

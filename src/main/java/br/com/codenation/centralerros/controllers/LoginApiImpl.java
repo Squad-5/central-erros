@@ -4,7 +4,9 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.api.LoginApi;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class LoginApiImpl implements LoginApi {
 
     @Override
