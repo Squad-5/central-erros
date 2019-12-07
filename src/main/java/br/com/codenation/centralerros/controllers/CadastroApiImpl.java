@@ -4,6 +4,7 @@ import br.com.codenation.centralerros.entity.Usuario;
 import br.com.codenation.centralerros.services.interfaces.UsuarioServiceInterface;
 import io.swagger.annotations.ApiParam;
 import io.swagger.api.CadastroApi;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,7 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CadastroApiImpl implements CadastroApi {
 
-    private UsuarioServiceInterface usuarioServiceInterface;
+    private final UsuarioServiceInterface usuarioServiceInterface;
+
+    @Autowired
+    public CadastroApiImpl(UsuarioServiceInterface usuarioServiceInterface) {
+        this.usuarioServiceInterface = usuarioServiceInterface;
+    }
 
     @Override
     public ResponseEntity<Void> addUser(@ApiParam(value = "Usuário a ser adicionado" ,required=true) @RequestHeader(value="x-usuário", required=true) String xUsurio,

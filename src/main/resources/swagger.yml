@@ -70,7 +70,7 @@ paths:
         200:
           description: "Sucesso"
           schema:
-            $ref: "#/definitions/LogsModel"
+            $ref: '#/definitions/ArrayOfLogsDto'
         204:
           description: "Nenhum registro encontrado"
         400:
@@ -155,7 +155,7 @@ paths:
           description: "Sucesso"
         400:
           description: "Não foi possível arquivar o log"
-  /log/detailed:
+  /log/{id}:
     get:
       tags:
         - "informações"
@@ -172,22 +172,22 @@ paths:
           name: "x-token"
           description: "Token recebido no login"
           required: true
-        - in: "query"
+        - in: "path"
           type: integer
-          name: "codigo"
+          name: "id"
           description: "Codigo do log"
           required: true
       responses:
         200:
           description: "Sucesso"
           schema:
-            $ref: "#/definitions/DetailedLogsModel"
+            $ref: '#/definitions/LogResponseModel'
         204:
           description: "Nenhum registro encontrado"
         400:
           description: "Bad request"
 definitions:
-  LogsModel:
+  LogsDto:
     type: "object"
     properties:
       codigo:
@@ -214,7 +214,7 @@ definitions:
         type: "string"
         format: "date-time"
         example: "2019-10-14 10:00:00"
-  DetailedLogsModel:
+  LogResponseModel:
     type: "object"
     properties:
       codigo:
@@ -247,3 +247,11 @@ definitions:
       detalhes:
         type: "string"
         example: "File:/go/pkg/mod"
+  ArrayOfLogs:
+    type: array
+    items:
+      $ref: '#/definitions/LogResponseModel'
+  ArrayOfLogsDto:
+    type: array
+    items:
+      $ref: '#/definitions/LogsDto'
