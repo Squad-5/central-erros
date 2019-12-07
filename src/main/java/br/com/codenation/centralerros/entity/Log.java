@@ -2,6 +2,7 @@ package br.com.codenation.centralerros.entity;
 
 import br.com.codenation.centralerros.enums.AmbienteEnum;
 import br.com.codenation.centralerros.enums.LevelEnum;
+import io.swagger.model.LogResponseModel;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;

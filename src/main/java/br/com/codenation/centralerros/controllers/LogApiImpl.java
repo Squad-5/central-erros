@@ -53,9 +53,12 @@ public class LogApiImpl implements LogApi {
         response.setColetor(log.getColetor());
         response.setData(OffsetDateTime.parse(log.getData()));
         response.setDescricao(log.getDescricao());
+        response.setDetalhes(log.getDetalhes());
+        response.setLevel(LogResponseModel.LevelEnum.valueOf(log.getLevel().toString()));
+        response.setOrigem(log.getOrigem());
+        response.setQuantidade(log.getQuantidade());
 
-
-        return null;
+        return ResponseEntity.ok(response);
     }
 
     @Override
